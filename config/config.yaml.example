@@ -1,0 +1,43 @@
+# gpu-orchestrator configuration
+#
+# Live copy: ~/.config/gpu-orchestrator/config.yaml
+# Everything has a sane default; this file is a reference.
+# Run `gpurun setup` for interactive configuration.
+
+llama:
+  # Base URL of the OpenAI-compatible API
+  url: http://127.0.0.1:8080
+  # Port number (for connection counting)
+  port: 8080
+  # Process pattern (ERE, matched against cmdline). Auto-detected on first run.
+  # Keep it anchored (^[^ ]*...) to avoid killing innocent processes.
+  # proc_pattern: '^[^ ]*/llama\.cpp/build/bin/llama-server'
+  # Start command (auto-detected from running process cmdline).
+  # Set manually with `gpurun use <script-or-command>`.
+  # start_cmd: '/home/user/ai/llama.cpp/build/bin/llama-server --hf model.gguf --host 0.0.0.0 --port 8080'
+
+timeouts:
+  health: 180    # max wait for /health + /v1/models after restart
+  stop: 20       # TERM->KILL escalation window
+  lock: 180      # max wait for GPU lock (another gpurun running)
+  grace: 15      # wait for active API connections to drain
+
+hook:
+  # permissionDecision for Claude Code hook: allow | ask | defer
+  decision: allow
+
+patterns:
+  # Extra GPU-command patterns (ERE), matched in addition to built-ins.
+  # extra:
+  #   - 'my_diffusion_tool'
+  #   - 'train_.*\.py'
+
+paths:
+  # Directories searched (in order) when `gpurun use NAME` is given a bare
+  # name instead of a full path. A trailing `.sh` is tried automatically.
+  # `~` is expanded. Uncomment to override the defaults shown below.
+  # model_dirs:
+  #   - ~/.config/gpu-orchestrator/models
+  #   - ~/models
+  #   - ~/scripts
+  #   - ~/.local/bin

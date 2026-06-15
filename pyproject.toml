@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gpu-orchestrator"
+version = "0.1.0"
+description = "Automatic GPU arbitration — pauses llama.cpp server around VRAM-heavy jobs"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "psutil>=5.9",
+    "pyyaml>=6.0",
+]
+authors = [
+    {name = "Vitor DallAcqua", email = "6484773+fandangos@users.noreply.github.com"},
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Hardware",
+]
+
+[project.scripts]
+gpurun = "gpu_orchestrator.cli:main"
+
+[project.entry-points."gpu_orchestrator.lifecycle"]
+process = "gpu_orchestrator.lifecycle:ProcessDriver"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
